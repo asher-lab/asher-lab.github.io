@@ -3,43 +3,65 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Simple Web Page</title>
+<title>Central Hub</title>
 <style>
   body {
-    background-color: white;
+    background-image: url('pexels-stywo-1261728.jpg'); /* Set background image */
+    background-size: cover; /* Cover entire viewport */
+    background-position: center; /* Center the background image */
+    background-repeat: no-repeat; /* Prevent repeating the image */
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
+    padding: 20px; /* Added padding for gap between text items */
+    flex-direction: column; /* Stack text items vertically */
+    font-size: 24px; /* Adjust font size as needed */
+    color: white; /* Set text color to white for contrast */
+    text-align: center; /* Center-align text */
   }
-  .box {
-    width: 200px;
-    height: 200px;
-    border: 2px solid green;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: transform 0.3s ease;
+  .title {
+    color: blue; /* Set title color to blue */
+    font-size: 36px; /* Increase font size for title */
+    margin-bottom: 20px; /* Add margin below title for spacing */
   }
-  .box:hover {
-    transform: scale(1.1);
+  .text-item {
+    max-width: 200px; /* Maximum width for each text item */
+    text-align: center; /* Center-align text */
+    margin: 20px; /* Added margin for gap between text items */
   }
-  .box a {
-    text-decoration: none;
-    color: black;
-    font-size: 20px;
+  .text-item a {
+    text-decoration: underline; /* Underline link text */
+    color: white; /* Make link text white for contrast */
+    font-weight: bold; /* Make link text bold */
+    display: block; /* Ensure each link takes full width */
+  }
+  .text-below {
+    margin-top: 20px; /* Margin between links and text below */
+    font-weight: normal; /* Set normal font weight for text below */
   }
 </style>
 </head>
 <body>
 
-<div class="box">
-  <a href="https://bookstack.com" target="_blank">Bookstack</a>
+<div class="title">
+  Central Hub
 </div>
-<div class="box"></div>
-<div class="box"></div>
 
+<div class="text-item">
+  <a href="https://bookstack.asherl.com" target="_blank">Bookstack</a>
+</div>
+<div class="text-item">
+  <a href="https://nginx-proxy-manager.asherl.com" target="_blank">NPM</a>
+</div>
+<div class="text-item">
+  <a href="https://kavita.asherl.com" target="_blank">Kavita</a>
+</div>
+<div class="text-item">
+  <a href="https://filebrowser.asherl.com" target="_blank">File Browser</a>
+</div>
+
+      
 </body>
 </html>
