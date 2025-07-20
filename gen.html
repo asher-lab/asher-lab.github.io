@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lotto + 20% Calculator</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    h2 {
+      font-size: 1.3rem;
+    }
+
+    input, button {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 12px;
+      font-size: 1rem;
+      margin: 10px 0;
+    }
+
+    .output {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 1.1rem;
+      word-wrap: break-word;
+    }
+
+    .section {
+      margin-top: 30px;
+    }
+
+    .number {
+      padding: 8px 12px;
+      margin: 5px;
+      display: inline-block;
+      font-size: 1.1rem;
+      font-weight: bold;
+      border-radius: 6px;
+    }
+
+    .odd { text-decoration: underline green wavy; }
+    .even { text-decoration: underline yellow dotted; }
+    .low { border-bottom: 3px solid red; }
+    .high { border-bottom: 3px solid blue; }
+
+    @media (min-width: 768px) {
+      body {
+        max-width: 600px;
+        margin: 40px auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Real-time 20% Deduction</h2>
+  <input type="text" id="numberInput" placeholder="Enter amount (e.g. 1,000,000)">
+  <div class="output" id="output">Less 20%: ₱0.00</div>
+
+  <div class="section">
+    <h2>Generate Lotto (3 Odd, 3 Even, 3 Low, 3 High → Only 6 Unique)</h2>
+    <button onclick="generateExactLotto()">Generate Lotto Numbers</button>
+    <div class="output" id="lottoResult"></div>
+  </div>
+
+  <script>
+    const numberInput = document.getElementById('numberInput');
+    const output = document.getElementById('output');
+
+    function formatPeso(value) {
+      return '₱' + value.toLocaleString('en-PH', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    numberInput.addEventListener('input', () => {
+      const rawValue = numberInput.value.replace(/,/g, '').replace(/[^\d]/g, '');
+      const number = parseFloat(rawValue);
+
+      if (!isNaN(number)) {
+        numberInput.value = Number(rawValue).toLocaleString('en-PH');
+        const less20 = number * 0.8;
+        output.textContent = `Less 20%: ${formatPeso(less20)}`;
+      } else {
+        output.textContent = 'Less 20%: ₱0.00';
+      }
+
+      numberInput.setSelectionRange(numberInput.value.length, numberInput.value.length);
+    });
+
+    function getFilteredRandom(start, end, count, filterFn, exclude = []) {
+      const pool = [];
+      for (let i = start; i <= end; i++) {
+        if (filterFn(i) && !exclude.includes(i)) {
+          pool.push(i);
+        }
+      }
+
+      const result = [];
+      while (result.length < count && pool.length > 0) {
+        const index = Math.floor(Math.random() * pool.length);
+        result.push(pool.splice(index, 1)[0]);
+      }
+
+      return result;
+    }
+
+    function generateExactLotto() {
+      let result = [];
+
+      const oddNumbers = getFilteredRandom(1, 42, 3, n => n % 2 === 1);
+      result.push(...oddNumbers);
+
+      const evenNumbers = getFilteredRandom(1, 42, 3, n => n % 2 === 0, result);
+      result.push(...evenNumbers);
+
+      const low = result.filter(n => n <= 21);
+      const high = result.filter(n => n >= 22);
+
+      if (low.length !== 3 || high.length !== 3) {
+        return generateExactLotto(); // Retry if not balanced
+      }
+
+      const sorted = result.sort((a, b) => a - b);
+
+      const lottoHTML = sorted.map(num => {
+        const classes = ['number'];
+        if (num % 2 === 1) classes.push('odd');
+        else classes.push('even');
+        if (num <= 21) classes.push('low');
+        else classes.push('high');
+        return `<span class="${classes.join(' ')}">${num}</span>`;
+      }).join(' ');
+
+      document.getElementById('lottoResult').innerHTML =
+        `Lotto Numbers:<br>${lottoHTML}<br>(Odd: 3, Even: 3 | Low: 3, High: 3)`;
+    }
+  </script>
+
+</body>
+</html>
