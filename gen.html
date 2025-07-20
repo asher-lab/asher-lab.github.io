@@ -67,6 +67,8 @@
     <h2>Generate Lotto (3 Odd, 3 Even, 3 Low, 3 High → Only 6 Unique)</h2>
     <button onclick="generateExactLotto()">Generate Lotto Numbers</button>
     <div class="output" id="lottoResult"></div>
+	<button onclick="generateCalendarLotto()">Generate Calendar Lotto (1–31)</button>
+	<div class="output" id="calendarLottoResult"></div>
   </div>
 
   <script>
@@ -142,6 +144,30 @@
       document.getElementById('lottoResult').innerHTML =
         `Lotto Numbers:<br>${lottoHTML}<br>(Odd: 3, Even: 3 | Low: 3, High: 3)`;
     }
+
+
+	function generateCalendarLotto() {
+		let result = [];
+
+		const oddNumbers = getFilteredRandom(1, 31, 3, n => n % 2 === 1);
+		result.push(...oddNumbers);
+
+		const evenNumbers = getFilteredRandom(1, 31, 3, n => n % 2 === 0, result);
+		result.push(...evenNumbers);
+
+		const sorted = result.sort((a, b) => a - b);
+
+		const calendarHTML = sorted.map(num => {
+			const classes = ['number'];
+			if (num % 2 === 1) classes.push('odd');
+			else classes.push('even');
+			return `<span class="${classes.join(' ')}">${num}</span>`;
+		}).join(' ');
+
+		document.getElementById('calendarLottoResult').innerHTML =
+			`Calendar Lotto Numbers (1–31):<br>${calendarHTML}<br>(Odd: 3, Even: 3)`;
+		}
+
   </script>
 
 </body>
